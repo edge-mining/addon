@@ -13,6 +13,10 @@ hassio_api: true
 hassio_role: manager
 host_network: true
 homeassistant_api: true
+map:
+  - type: homeassistant_config
+    read_only: False
+    path: /config/
 
 options:
   broker_host: "homeassistant"
