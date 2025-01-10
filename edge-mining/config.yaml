@@ -20,9 +20,13 @@ map:
 
 options:
   broker_host: "homeassistant"
-  miner_ip: "192.168.1.100"
+  miner_ip: "192.168.1.111"
+  miner_username: "root"
+  miner_password: "root"
 schema:
   broker_host: str
   username: str?
   password: password?
   miner_ip: str
+  miner_username: str
+  miner_password: password

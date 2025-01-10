@@ -12,7 +12,9 @@ CUSTOM_COMPONENTS_PATH="/config/custom_components/miner"
 BROKER_HOST=$(bashio::config 'broker_host')
 USERNAME=$(bashio::config 'username')
 PASSWORD=$(bashio::config 'password')
-MINER_IP=$(bashio::config 'miner_ip')  # Read the miner IP from options
+MINER_IP=$(bashio::config 'miner_ip')
+MINER_USERNAME=$(bashio::config 'miner_username')
+MINER_PASSWORD=$(bashio::config 'miner_password')
 
 bashio::log.info "Starting Edge Mining setup script..."
 
@@ -276,17 +278,38 @@ if [ -z "$EXISTING_MINER_ENTRY" ]; then
   MINER_FLOW_ID=$(echo "$MINER_FLOW" | jq -r '.flow_id')
 
   bashio::log.info "Submitting miner IP address: $MINER_IP"
-  CONFIGURE_MINER=$(curl -s -X POST \
+  CONFIGURE_MINER_IP=$(curl -s -X POST \
     -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
     -H "Content-Type: application/json" \
     -d "{\"ip\": \"$MINER_IP\"}" \
     "$SUPERVISOR_API/core/api/config/config_entries/flow/$MINER_FLOW_ID")
 
-  if [[ "$(echo "$CONFIGURE_MINER" | jq -r '.type')" == "create_entry" ]]; then
+  STEP_TYPE=$(echo "$CONFIGURE_MINER_IP" | jq -r '.type')
+  STEP_ID=$(echo "$CONFIGURE_MINER_IP" | jq -r '.step_id')
+
+  if [ "$STEP_TYPE" == "form" ] && [ "$STEP_ID" == "login" ]; then
+    bashio::log.info "Submitting miner login credentials (step: $STEP_ID)..."
+    CONFIGURE_MINER_LOGIN=$(curl -s -X POST \
+      -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+      -H "Content-Type: application/json" \
+      -d "{
+            \"web_username\": \"$MINER_USERNAME\",
+            \"web_password\": \"$MINER_PASSWORD\"
+          }" \
+      "$SUPERVISOR_API/core/api/config/config_entries/flow/$MINER_FLOW_ID")
+
+    if [[ "$(echo "$CONFIGURE_MINER_LOGIN" | jq -r '.type')" == "create_entry" ]]; then
+      bashio::log.info "Miner integration configured successfully!"
+    else
+      bashio::log.error "Failed to configure the miner integration during login step!"
+      echo "$CONFIGURE_MINER_LOGIN"
+      exit 1
+    fi
+  elif [ "$STEP_TYPE" == "create_entry" ]; then
     bashio::log.info "Miner integration configured successfully!"
   else
-    bashio::log.error "Failed to configure the miner integration!"
-    echo "$CONFIGURE_MINER"
+    bashio::log.error "Unexpected step type: $STEP_TYPE. Failed to complete miner integration setup."
+    echo "$CONFIGURE_MINER_IP"
     exit 1
   fi
 else
