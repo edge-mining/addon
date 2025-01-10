@@ -167,7 +167,7 @@ else
   bashio::log.info "Custom repository is already present."
 fi
 
-# Check if the Voltronic add-on is installed
+# Install the Voltronic add-on
 bashio::log.info "Checking the status of the Voltronic add-on..."
 ADDON_INFO=$(curl -s -X GET \
   -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
@@ -210,16 +210,52 @@ fi
 bashio::log.info "Voltronic add-on is running!"
 
 # 5. Check and clone the miner repository if missing
-bashio::log.info "Checking if the miner integration repository exists..."
-if [ ! -d "$CUSTOM_COMPONENTS_PATH" ]; then
-  bashio::log.notice "Miner integration repository not found. Cloning from $MINER_REPO..."
-  git clone "$MINER_REPO" /tmp/hass-miner
-  mkdir -p /config/custom_components
-  cp -r /tmp/hass-miner/custom_components/miner "$CUSTOM_COMPONENTS_PATH"
-  rm -rf /tmp/hass-miner
-  bashio::log.info "Miner integration repository cloned and installed!"
+bashio::log.info "Checking if the miner integration is already installed..."
+if [ -d "$CUSTOM_COMPONENTS_PATH" ]; then
+  bashio::log.info "Miner integration is already installed at $CUSTOM_COMPONENTS_PATH."
 else
-  bashio::log.info "Miner integration repository already exists."
+  bashio::log.notice "Miner integration is not installed. Proceeding with installation..."
+
+  TEMP_DIR="/tmp/hass-miner"
+  bashio::log.info "Cloning the repository to $TEMP_DIR..."
+  if git clone "$MINER_REPO" "$TEMP_DIR"; then
+    bashio::log.info "Repository cloned successfully."
+
+    # Ensure the custom_components directory exists
+    bashio::log.info "Ensuring the custom components directory exists..."
+    if mkdir -p "$(dirname "$CUSTOM_COMPONENTS_PATH")"; then
+      bashio::log.info "Directory $(dirname "$CUSTOM_COMPONENTS_PATH") created or already exists."
+    else
+      bashio::log.error "Failed to create directory $(dirname "$CUSTOM_COMPONENTS_PATH"). Check permissions."
+      exit 1
+    fi
+
+    # Copy the miner files
+    bashio::log.info "Copying miner integration files to $CUSTOM_COMPONENTS_PATH..."
+    if cp -r "$TEMP_DIR/custom_components/miner" "$CUSTOM_COMPONENTS_PATH"; then
+      bashio::log.info "Miner integration files copied successfully."
+    else
+      bashio::log.error "Failed to copy miner integration files. Check permissions and paths."
+      exit 1
+    fi
+
+    # Clean up
+    bashio::log.info "Cleaning up temporary files..."
+    rm -rf "$TEMP_DIR"
+    bashio::log.info "Temporary files cleaned up."
+
+    # Restart Home Assistant
+    bashio::log.notice "Restarting Home Assistant to apply changes..."
+    if curl -s -X POST -H "Authorization: Bearer $SUPERVISOR_TOKEN" "$SUPERVISOR_API/core/restart"; then
+      bashio::log.info "Home Assistant restart initiated."
+    else
+      bashio::log.error "Failed to restart Home Assistant. Check the supervisor API."
+      exit 1
+    fi
+  else
+    bashio::log.error "Failed to clone the repository. Check network and repository URL."
+    exit 1
+  fi
 fi
 
 # 6. Configure the miner integration
