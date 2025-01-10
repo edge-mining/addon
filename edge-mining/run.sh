@@ -6,6 +6,7 @@ EMQX_ADDON_SLUG="a0d7b954_emqx"
 CUSTOM_REPO="https://github.com/GitGab19/addon-voltronic-inverters"
 CUSTOM_ADDON_SLUG="ec05b559_voltronic"
 MINER_REPO="https://github.com/Schnitzel/hass-miner"
+CUSTOM_COMPONENTS_PATH="/config/custom_components/miner"
 
 # Read add-on options
 BROKER_HOST=$(bashio::config 'broker_host')
@@ -57,7 +58,92 @@ fi
 
 bashio::log.info "EMQX add-on is running!"
 
-# 3. Check and install the custom repository and Voltronic add-on
+# 3. Configure the MQTT integration
+bashio::log.info "Configuring the MQTT integration in Home Assistant..."
+
+EXISTING_ENTRIES=$(curl -s -X GET \
+  -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+  "$SUPERVISOR_API/core/api/config/config_entries/entry")
+
+MQTT_EXISTS=$(echo "$EXISTING_ENTRIES" | jq -r '.[] | select(.domain == "mqtt")')
+
+if [ -z "$MQTT_EXISTS" ]; then
+  bashio::log.notice "MQTT integration is not configured. Starting configuration..."
+  FLOW_RESPONSE=$(curl -s -X POST \
+    -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{"handler": "mqtt"}' \
+    "$SUPERVISOR_API/core/api/config/config_entries/flow")
+
+  FLOW_ID=$(echo "$FLOW_RESPONSE" | jq -r '.flow_id')
+
+  if [ -z "$FLOW_ID" ]; then
+    bashio::log.error "Failed to create an MQTT configuration flow!"
+    echo "$FLOW_RESPONSE"
+    exit 1
+  fi
+
+  bashio::log.info "MQTT configuration flow created with ID: $FLOW_ID"
+
+  while true; do
+    STEP_RESPONSE=$(curl -s -X GET \
+      -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+      "$SUPERVISOR_API/core/api/config/config_entries/flow/$FLOW_ID")
+
+    STEP_TYPE=$(echo "$STEP_RESPONSE" | jq -r '.type')
+    STEP_ID=$(echo "$STEP_RESPONSE" | jq -r '.step_id')
+
+    bashio::log.info "Current step type: $STEP_TYPE (ID: $STEP_ID)"
+
+    if [ "$STEP_TYPE" == "menu" ]; then
+      bashio::log.info "Selecting the 'broker' option from the menu..."
+      curl -s -X POST \
+        -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+        -H "Content-Type: application/json" \
+        -d '{"next_step_id": "broker"}' \
+        "$SUPERVISOR_API/core/api/config/config_entries/flow/$FLOW_ID"
+
+    elif [ "$STEP_TYPE" == "form" ]; then
+      bashio::log.info "Entering broker details..."
+      CONFIG_STEP_RESPONSE=$(curl -s -X POST \
+        -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+        -H "Content-Type: application/json" \
+        -d "{
+              \"broker\": \"$BROKER_HOST\",
+              \"port\": 1883,
+              \"username\": \"$USERNAME\",
+              \"password\": \"$PASSWORD\"
+            }" \
+        "$SUPERVISOR_API/core/api/config/config_entries/flow/$FLOW_ID")
+
+      if [[ "$(echo "$CONFIG_STEP_RESPONSE" | jq -r '.type')" == "create_entry" ]]; then
+        bashio::log.info "MQTT successfully configured!"
+        break
+      else
+        bashio::log.error "Something went wrong during the MQTT configuration!"
+        echo "$CONFIG_STEP_RESPONSE"
+        exit 1
+      fi
+
+    elif [ "$STEP_TYPE" == "progress" ]; then
+      bashio::log.info "Waiting for process completion: $STEP_ID..."
+      sleep 5
+
+    elif [ "$STEP_TYPE" == "create_entry" ]; then
+      bashio::log.info "MQTT successfully configured!"
+      break
+
+    else
+      bashio::log.error "Unknown step type: $STEP_TYPE."
+      echo "$STEP_RESPONSE"
+      exit 1
+    fi
+  done
+else
+  bashio::log.info "MQTT integration is already configured."
+fi
+
+# 4. Check and install the custom repository and Voltronic add-on
 bashio::log.info "Checking if the custom repository is present..."
 EXISTING_REPOS=$(curl -s -X GET \
   -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
@@ -123,7 +209,20 @@ fi
 
 bashio::log.info "Voltronic add-on is running!"
 
-# 4. Configure the miner integration
+# 5. Check and clone the miner repository if missing
+bashio::log.info "Checking if the miner integration repository exists..."
+if [ ! -d "$CUSTOM_COMPONENTS_PATH" ]; then
+  bashio::log.notice "Miner integration repository not found. Cloning from $MINER_REPO..."
+  git clone "$MINER_REPO" /tmp/hass-miner
+  mkdir -p /config/custom_components
+  cp -r /tmp/hass-miner/custom_components/miner "$CUSTOM_COMPONENTS_PATH"
+  rm -rf /tmp/hass-miner
+  bashio::log.info "Miner integration repository cloned and installed!"
+else
+  bashio::log.info "Miner integration repository already exists."
+fi
+
+# 6. Configure the miner integration
 bashio::log.info "Checking if the miner integration is already configured..."
 EXISTING_MINER_ENTRY=$(curl -s -X GET \
   -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
