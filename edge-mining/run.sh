@@ -15,6 +15,7 @@ PASSWORD=$(bashio::config 'password')
 MINER_IP=$(bashio::config 'miner_ip')
 MINER_USERNAME=$(bashio::config 'miner_username')
 MINER_PASSWORD=$(bashio::config 'miner_password')
+MINER_TITLE=$(bashio::config 'miner_name')
 
 bashio::log.info "Starting Edge Mining setup script..."
 
@@ -277,41 +278,76 @@ if [ -z "$EXISTING_MINER_ENTRY" ]; then
 
   MINER_FLOW_ID=$(echo "$MINER_FLOW" | jq -r '.flow_id')
 
-  bashio::log.info "Submitting miner IP address: $MINER_IP"
-  CONFIGURE_MINER_IP=$(curl -s -X POST \
-    -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
-    -H "Content-Type: application/json" \
-    -d "{\"ip\": \"$MINER_IP\"}" \
-    "$SUPERVISOR_API/core/api/config/config_entries/flow/$MINER_FLOW_ID")
-
-  STEP_TYPE=$(echo "$CONFIGURE_MINER_IP" | jq -r '.type')
-  STEP_ID=$(echo "$CONFIGURE_MINER_IP" | jq -r '.step_id')
-
-  if [ "$STEP_TYPE" == "form" ] && [ "$STEP_ID" == "login" ]; then
-    bashio::log.info "Submitting miner login credentials (step: $STEP_ID)..."
-    CONFIGURE_MINER_LOGIN=$(curl -s -X POST \
-      -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
-      -H "Content-Type: application/json" \
-      -d "{
-            \"web_username\": \"$MINER_USERNAME\",
-            \"web_password\": \"$MINER_PASSWORD\"
-          }" \
-      "$SUPERVISOR_API/core/api/config/config_entries/flow/$MINER_FLOW_ID")
-
-    if [[ "$(echo "$CONFIGURE_MINER_LOGIN" | jq -r '.type')" == "create_entry" ]]; then
-      bashio::log.info "Miner integration configured successfully!"
-    else
-      bashio::log.error "Failed to configure the miner integration during login step!"
-      echo "$CONFIGURE_MINER_LOGIN"
-      exit 1
-    fi
-  elif [ "$STEP_TYPE" == "create_entry" ]; then
-    bashio::log.info "Miner integration configured successfully!"
-  else
-    bashio::log.error "Unexpected step type: $STEP_TYPE. Failed to complete miner integration setup."
-    echo "$CONFIGURE_MINER_IP"
+  if [ -z "$MINER_FLOW_ID" ]; then
+    bashio::log.error "Failed to start the configuration flow for the miner integration!"
+    echo "$MINER_FLOW"
     exit 1
   fi
+
+  while true; do
+    STEP_RESPONSE=$(curl -s -X GET \
+      -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+      "$SUPERVISOR_API/core/api/config/config_entries/flow/$MINER_FLOW_ID")
+
+    STEP_TYPE=$(echo "$STEP_RESPONSE" | jq -r '.type')
+    STEP_ID=$(echo "$STEP_RESPONSE" | jq -r '.step_id')
+
+    if [ -z "$STEP_TYPE" ]; then
+      bashio::log.error "Unexpected empty response during configuration flow!"
+      echo "$STEP_RESPONSE"
+      exit 1
+    fi
+
+    bashio::log.info "Processing step: $STEP_ID (type: $STEP_TYPE)..."
+
+    case "$STEP_ID" in
+      user)
+        bashio::log.info "Submitting miner IP address: $MINER_IP"
+        STEP_PAYLOAD="{\"ip\": \"$MINER_IP\"}"
+        ;;
+
+      login)
+        bashio::log.info "Submitting miner login credentials..."
+        STEP_PAYLOAD="{
+          \"web_username\": \"$MINER_USERNAME\",
+          \"web_password\": \"$MINER_PASSWORD\"
+        }"
+        ;;
+
+      title)
+        bashio::log.info "Submitting miner title: $MINER_TITLE"
+        STEP_PAYLOAD="{\"title\": \"$MINER_TITLE\"}"
+        ;;
+
+      create_entry)
+        bashio::log.info "Miner integration configured successfully!"
+        break
+        ;;
+
+      *)
+        bashio::log.error "Unhandled step type: $STEP_ID"
+        echo "$STEP_RESPONSE"
+        exit 1
+        ;;
+    esac
+
+    STEP_RESULT=$(curl -s -X POST \
+      -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+      -H "Content-Type: application/json" \
+      -d "$STEP_PAYLOAD" \
+      "$SUPERVISOR_API/core/api/config/config_entries/flow/$MINER_FLOW_ID")
+
+    if [[ "$(echo "$STEP_RESULT" | jq -r '.type')" == "create_entry" ]]; then
+      bashio::log.info "Miner integration configured successfully!"
+      break
+    elif [[ "$(echo "$STEP_RESULT" | jq -r '.type')" == "form" ]]; then
+      bashio::log.info "Continuing with the next form step..."
+    else
+      bashio::log.error "Unexpected response during configuration!"
+      echo "$STEP_RESULT"
+      exit 1
+    fi
+  done
 else
   bashio::log.info "The miner integration is already configured."
 fi

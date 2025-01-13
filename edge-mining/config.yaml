@@ -23,6 +23,7 @@ options:
   miner_ip: "192.168.1.111"
   miner_username: "root"
   miner_password: "root"
+  miner_name: "S19j Pro"
 schema:
   broker_host: str
   username: str?
@@ -30,3 +31,4 @@ schema:
   miner_ip: str
   miner_username: str
   miner_password: password
+  miner_name: str
