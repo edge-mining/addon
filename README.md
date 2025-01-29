@@ -36,21 +36,18 @@ Our project aims to develop a mining management system that:
 
 ---
 
-## 🔧 Getting Started: Build Your System in 7 Steps
+## 🔧 Getting Started
 
 Follow these instructions to create a mining setup integrated with Home Assistant to manage an ASIC miner based on your energy availability.
 
 ### Prerequisites 📋
 
 Before you begin, make sure you have the following:
-
-#### Hardware 🛠️:
-
 - **Raspberry Pi 4** (or a dedicated device) with **Home Assistant** and **HACS** installed ([HACS installation guide](https://www.hacs.xyz/docs/use/download/download/#to-download-hacs)).
 - **Compatible inverter**: Voltronic, Axpert, Mppsolar PIP, Voltacon, or Effekta.
 - **ASIC miner** running **BraiinsOS** ([BraiinsOS installation guide](https://braiins.com/os-firmware)).
 
-### Install `edge-mining` addon on your home assistant istance
+### Install `edge-mining` addon on your home assistant istance 📥
 
 Now the only thing you need to do is to install the `edge-mining` addon, by clicking the following button:
 
