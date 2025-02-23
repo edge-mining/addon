@@ -106,7 +106,7 @@ Using a smart plug to control your miner's power on/off is advisable. Ensure tha
 
 Below is an example of a recommended view setup, displaying both the inverter's overall data, the miner's performance metrics, and the smart plug control for efficient energy management.
 
-[Edge Mining Configuration]\(addon-edge-mining/images/edge mining configuration.png)
+[addon-edge-mining/images/edge%20mining%20configuration.png](https://github.com/sfrrcr/addon-edge-mining/blob/main/images/edge%20mining%20configuration.png)
 
 ---
 
