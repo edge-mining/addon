@@ -49,15 +49,11 @@ Before you begin, make sure you have the following:
 - **Compatible inverter**: Voltronic, Axpert, Mppsolar PIP, Voltacon, or Effekta. Soon to be compatible with Solaredge as well.
 - **ASIC miner** with a static IP, running **BraiinsOS** ([BraiinsOS installation guide](https://braiins.com/os-firmware))
 
-### Install `edge-mining` add-on on your Home Assistant instance
+## Edge Mining Installation
 
 Now the only thing you need to do is to install the `edge-mining` add-on by clicking the following button:
 
 [![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fedge-mining%2Faddon-edge-mining)
-
----
-
-## Edge Mining Installation
 
 Edge Mining will install several add-ons and integrations directly into your Home Assistant for its own use.
 
@@ -85,7 +81,6 @@ After completing these steps, your system will be ready to operate with Edge Min
 Now you are ready to set up the view and create automations based on your needs.
 
 
-
 ## Configuration Suggestions
 
 ### Create a view
@@ -99,9 +94,6 @@ It is recommended to install the Forecast.solar integration to obtain a forecast
 ### Use a Smart Plug
 
 Using a smart plug to control your miner's power on/off is advisable. Ensure that the chosen model has sufficient amperage to handle the miner’s high power consumption. For example, the TP-Link Tapo P125M (16A) is a reliable option for efficiently managing the miner’s power operations.
-
-
-
 
 
 Below is an example of a recommended view setup, displaying both the inverter's overall data, the miner's performance metrics, and the smart plug control for efficient energy management.
