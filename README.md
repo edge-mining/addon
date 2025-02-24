@@ -51,7 +51,7 @@ Before you begin, make sure you have the following:
 
 ## Edge Mining Installation
 
-Now the only thing you need to do is to install the `edge-mining` add-on by clicking the following button:
+Now the first thing you need to do is to install the Edge Mining add-on by clicking the following button:
 
 [![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fedge-mining%2Faddon-edge-mining)
 
@@ -103,34 +103,58 @@ Below is an example of a recommended view setup, displaying both the inverter's 
 ![View Example](https://github.com/sfrrcr/addon-edge-mining/blob/main/images/view-example.png)
 
 
-## Automations Example
+# Automations Example
 
-Once the creation of one or more views that allow us to easily visualize our system’s data is complete, it is recommended to create automations—simple or complex—based on your specific needs.  
-Below, we explain the automations we are currently experimenting with, some of which we aim to include in Edge Mining in the future.
+## Introduction
 
-### The Logic Behind These Automations
+One of the biggest challenges in managing a solar-powered system is efficiently utilizing all excess energy. Simple automations for turning devices on and off may work in basic scenarios, but they often lead to situations where, on clear sunny days, the battery reaches **100% charge too quickly**, even with the miner running. When this happens, surplus energy from the solar panels goes unused because the miner's power consumption may be lower than the system's maximum production.
 
-These Home Assistant automations manage a miner’s power state (on/off) based on:
+To solve this, we are experimenting with automations that **proactively manage the miner’s operation based on daily solar production forecasts**. Instead of waiting for excess energy to accumulate, the system **starts mining earlier in the day when the battery is still low**, allowing solar energy to be used gradually throughout the day. This approach ensures that:
 
-1. **Solar Power Forecast** (via [forecast.solar](https://forecast.solar)):
+- The battery charges more slowly and reaches full capacity later in the day.
+- The solar system operates at **maximum efficiency**, using as much available energy as possible.
+- There is sufficient battery storage to sustain energy needs throughout the night.
 
-   - If tomorrow’s expected solar production is high, the battery can be discharged more aggressively (lower battery threshold).
-   - If it’s low, the system tries to preserve more battery (higher battery threshold).
+The automations described below are part of an ongoing experiment to **optimize surplus energy usage** and may evolve as we refine the system. In the future, these automations will be integrated into Edge Mining as part of its energy optimization framework.
 
-2. **Battery Charge Level**:
+## How the Automations Work
 
-   - The miner only turns on if the battery is above certain percentages for a given amount of time, ensuring enough stored energy.
-   - The miner turns off when the battery drops below a dynamic threshold (depending on the forecast).
+These Home Assistant automations are designed to efficiently manage the **switching ON and OFF** of a miner based on battery level, solar forecast, and real-time solar power availability. The goal is to maximize energy efficiency while ensuring that battery power is used optimally.
 
-3. **PV Charging Power** (`sensor.mpp_pv_charging_power`):
+---
 
-   - If solar power drops under 1000 W for at least 5 minutes, we assume the day’s productive solar hours are over or at least temporarily too low, and the automation checks the battery charge. If the charge is also below the defined threshold, the miner is shut down to conserve battery.
+## **1. Switching ON the Miner**
 
-### Why This Approach?
+The miner is turned on when there is enough stored battery energy and an expectation that upcoming solar production will be sufficient to sustain mining operations. The system evaluates both the battery’s current charge and the estimated solar energy available throughout the day to determine the best moment to start mining.
 
-- **Energy Optimization**: We use solar forecasts to decide how deep to discharge the battery. When tomorrow’s sun is plentiful, it’s safe to use more of the battery for mining. If tomorrow’s sun is limited, the system preserves a higher battery reserve.
-- **Automatic Seasonal Adaptation**: As days get longer, forecasts generally increase. The dynamic threshold logic naturally adjusts so the battery can be discharged more in spring/summer.
-- **Flexible On/Off Logic**: Two separate ON automations handle different battery and production levels, ensuring the miner only runs when there’s sufficient solar energy.
+### **How It Works**
+
+- If the battery has been at a stable and sufficient level for a certain period, the system considers enabling mining.
+- Before switching on, it checks whether the expected solar production for the remainder of the day is high enough to sustain mining operations without excessive battery depletion.
+- If both conditions are met, the miner is turned on and continues running until conditions require it to be shut down.
+
+This approach ensures that mining only starts when there is a reasonable expectation of sustainable energy availability, preventing unnecessary battery drain.
+
+---
+
+## **2. Switching OFF the Miner**
+
+The miner is turned off when solar production becomes insufficient to support its operation, and the battery level begins to decline beyond an acceptable threshold. This prevents excessive battery depletion and ensures energy is reserved for other essential uses.
+
+### **How It Works**
+
+- The system continuously monitors the battery level and solar production to determine whether mining can be sustained.
+- When solar input drops significantly, signaling that the day’s productive hours are ending or conditions have changed, the automation evaluates whether the battery has enough remaining energy to continue operating.
+- If the battery level falls below a dynamically set threshold—adjusted based on the solar energy forecast for the next day—the miner is shut down to conserve energy.
+
+By adjusting the shutdown threshold dynamically according to solar forecasts, the system can optimize energy usage:
+
+- On days with high expected solar production, it allows deeper battery discharge before shutting down.
+- On days with lower expected solar production, it preserves more battery energy by shutting down sooner.
+
+This logic ensures that mining is halted at the right time, balancing energy efficiency with the need to sustain battery reserves for non-mining power consumption.
+
+
 
 
 ---
