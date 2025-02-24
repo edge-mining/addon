@@ -102,6 +102,37 @@ Below is an example of a recommended view setup, displaying both the inverter's 
 
 ![View Example](https://github.com/sfrrcr/addon-edge-mining/blob/main/images/view-example.png)
 
+
+## Automations Example
+
+Once the creation of one or more views that allow us to easily visualize our system’s data is complete, it is recommended to create automations—simple or complex—based on your specific needs.  
+Below, we explain the automations we are currently experimenting with, some of which we aim to include in Edge Mining in the future.
+
+### The Logic Behind These Automations
+
+These Home Assistant automations manage a miner’s power state (on/off) based on:
+
+1. **Solar Power Forecast** (via [forecast.solar](https://forecast.solar)):
+
+   - If tomorrow’s expected solar production is high, the battery can be discharged more aggressively (lower battery threshold).
+   - If it’s low, the system tries to preserve more battery (higher battery threshold).
+
+2. **Battery Charge Level**:
+
+   - The miner only turns on if the battery is above certain percentages for a given amount of time, ensuring enough stored energy.
+   - The miner turns off when the battery drops below a dynamic threshold (depending on the forecast).
+
+3. **PV Charging Power** (`sensor.mpp_pv_charging_power`):
+
+   - If solar power drops under 1000 W for at least 5 minutes, we assume the day’s productive solar hours are over or at least temporarily too low, and the automation checks the battery charge. If the charge is also below the defined threshold, the miner is shut down to conserve battery.
+
+### Why This Approach?
+
+- **Energy Optimization**: We use solar forecasts to decide how deep to discharge the battery. When tomorrow’s sun is plentiful, it’s safe to use more of the battery for mining. If tomorrow’s sun is limited, the system preserves a higher battery reserve.
+- **Automatic Seasonal Adaptation**: As days get longer, forecasts generally increase. The dynamic threshold logic naturally adjusts so the battery can be discharged more in spring/summer.
+- **Flexible On/Off Logic**: Two separate ON automations handle different battery and production levels, ensuring the miner only runs when there’s sufficient solar energy.
+
+
 ---
 
 ## Conclusion
