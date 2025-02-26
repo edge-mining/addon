@@ -1,5 +1,5 @@
 name: "Edge Mining"
-description: "An innovative solution to optimize the use of excess energy produced by small power plants, particularly domestic ones, integrating Bitcoin mining in the system, making it an easy-to-implement choice. This approach turns a potential inefficiency into a concrete opportunity for profit and sustainable energy use. "
+description: "An innovative solution to optimize the use of excess energy produced by small power plants, particularly domestic ones, integrating Bitcoin mining in the system, making it an easy-to-implement choice. This approach turns a potential inefficiency into a concrete opportunity for profit and sustainable energy use."
 version: "0.1.0"
 slug: "edge_mining"
 init: false
@@ -19,16 +19,27 @@ map:
     path: /config/
 
 options:
-  broker_host: "homeassistant"
+  inverter_type: voltronic
+  solaredge_ip: "192.168.1.100 (set this ONLY for SOLAREDGE inverters)"
+  solaredge_port: 1502
+  solaredge_modbus_address: 1
   miner_ip: "192.168.1.111"
   miner_username: "root"
   miner_password: "root"
-  miner_name: "S19j Pro"
+  miner_title: "S19j Pro"
+  mqtt_broker_host: "homeassistant"
+  mqtt_username: "mqtt_user"
+  mqtt_password: "mqtt_password"
+
 schema:
-  broker_host: str
-  username: str?
-  password: password?
+  inverter_type: list(voltronic|solaredge)
+  solaredge_ip: str?
+  solaredge_port: int?
+  solaredge_modbus_address: int?
   miner_ip: str
   miner_username: str
   miner_password: password
-  miner_name: str
+  miner_title: str
+  mqtt_broker_host: str?
+  mqtt_username: str?
+  mqtt_password: password?
