@@ -69,14 +69,18 @@ Edge Mining will automatically install various add-ons and integrations into Hom
 
 ### For Solaredge
 
-- ** [Solaredge Modbus Multi](https://github.com/WillCodeForCats/solaredge-modbus-multi) (integration) - Provides Modbus/TCP local polling to one or more SolarEdge inverters
+- **[Solaredge Modbus Multi](https://github.com/WillCodeForCats/solaredge-modbus-multi)** (integration) - Provides Modbus/TCP local polling to one or more SolarEdge inverters
 
 ### Initial Configuration
 
-Once Edge Mining is installed, a small configuration is required:
+Once Edge Mining is installed, before running it, a small configuration is required:
 
-1. **Insert the miner's static IP address** to ensure stable connectivity.
+1. **Enter the miner's static IP address** to ensure stable connectivity.
 2. **Enter the username and password for BraiinsOS**, which are usually `root/root` by default.
+3. **Check and insert the parameters needed for Solaredge or Voltronic** inverter:
+   - for Solaredge, make sure [**modbus is enabled**](https://github.com/WillCodeForCats/solaredge-modbus-multi/wiki/Configuration) on your inverter and enter `solaredge_ip`, `solaredge_port`, and `solaredge_modbus_address` fields;
+   - for Voltronic, the default values on the config should be fine;
+4. **Click start** and wait a bit to have all your setup ready for your first automations!
 
 ![Edge Mining Configuration](https://github.com/edge-mining/addon-edge-mining/blob/main/images/edge-mining-configuration-new.png)
 
