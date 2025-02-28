@@ -46,7 +46,7 @@ Before you begin, make sure you have the following:
 
 - **Raspberry Pi 4** (or another dedicated device)
 - **Home Assistant** with **HACS** installed ([HACS installation guide](https://www.hacs.xyz/docs/use/download/download/#to-download-hacs))
-- **Compatible inverter**: Voltronic, Axpert, Mppsolar PIP, Voltacon, or Effekta. Soon to be compatible with Solaredge as well.
+- **Compatible inverter**: Solaredge and Voltronic (Axpert, MPP Solar PIP, Voltacon or Effekta).
 - **ASIC miner** with a static IP, running **BraiinsOS** ([BraiinsOS installation guide](https://braiins.com/os-firmware))
 
 ## Edge Mining Installation
@@ -55,17 +55,21 @@ Now the first thing you need to do is to install the Edge Mining add-on by click
 
 [![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fedge-mining%2Faddon-edge-mining)
 
-Edge Mining will install several add-ons and integrations directly into your Home Assistant for its own use.
+Edge Mining will automatically install various add-ons and integrations into Home Assistant for its own use, depending on the selected inverter.
 
-### Integrations Installed:
+### General Installations
 
-- **MQTT** – Acts as a communication bridge between system components.
-- **HASS-miner** – Enables seamless control and monitoring of ASIC miners.
+- **[HASS-miner](https://github.com/Schnitzel/hass-miner)** – Enables seamless control and monitoring of ASIC miners.
 
-### Add-ons Installed:
+### For Voltronic:
 
-- **EMQX** – A high-performance MQTT broker that ensures reliable and scalable communication between components.
-- **Voltronic** – Designed to integrate and manage Voltronic inverters, enabling real-time monitoring.
+- **[MQTT](https://github.com/home-assistant/core/tree/dev/homeassistant/components/mqtt)** (intergation) – Acts as a communication bridge between system components.
+- **[EMQX](https://github.com/hassio-addons/addon-emqx)** (add-on) – A high-performance MQTT broker that ensures reliable and scalable communication between components.
+- **[Voltronic](https://github.com/GitGab19/addon-voltronic-inverters)** (add-on) – Designed to integrate and manage Voltronic inverters, enabling real-time monitoring.
+
+### For Solaredge
+
+- ** [Solaredge Modbus Multi](https://github.com/WillCodeForCats/solaredge-modbus-multi) (integration) - Provides Modbus/TCP local polling to one or more SolarEdge inverters
 
 ### Initial Configuration
 
@@ -91,7 +95,7 @@ Consider creating a view that includes an overall visualization of the inverter 
 
 ### Install Forecast.solar
 
-It is recommended to install the Forecast.solar integration to obtain a forecast of your photovoltaic system's energy production. By providing the GPS location of your installation, along with the orientation and tilt of the panels, you can get accurate predictions of solar radiation. With Forecast.solar data, it is possible to create automation rules based on irradiation forecasts, making energy consumption adjustments more precise and efficient.
+It is recommended to install the [Forecast.solar](https://www.home-assistant.io/integrations/forecast_solar/) integration to obtain a forecast of your photovoltaic system's energy production. By providing the GPS location of your installation, along with the orientation and tilt of the panels, you can get accurate predictions of solar radiation. With Forecast.solar data, it is possible to create automation rules based on irradiation forecasts, making energy consumption adjustments more precise and efficient.
 
 ### Use a Smart Plug
 
