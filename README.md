@@ -99,7 +99,7 @@ It is recommended to install the [Forecast.solar](https://www.home-assistant.io/
 
 ### Use a Smart Plug
 
-Using a smart plug to control your miner's power on/off is advisable. Ensure that the chosen model has sufficient amperage to handle the miner’s high power consumption. For example, the TP-Link Tapo P125M (16A) is a reliable option for efficiently managing the miner’s power operations.
+Using a smart plug to control your miner's power on/off is advisable. Ensure that the chosen model has sufficient amperage to handle the miner’s high power consumption. For example, the TP-Link Tapo P110M (16A) is a reliable option for efficiently managing the miner’s power operations.
 
 
 Below is an example of a recommended view setup, displaying both the inverter's overall data, the miner's performance metrics, and the smart plug control for efficient energy management.
