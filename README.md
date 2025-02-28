@@ -12,7 +12,7 @@ In energy production plants, especially those relying on renewable sources like 
 - **Using energy for marginal purposes**: Such as resistive heating, which generally doesn’t add significant economic value.
 - **Wasting the energy**: Which is a loss that reduces the overall efficiency of the plant.
 
-## 🚀 The Solution: Bitcoin Mining
+## 🔌 The Solution: Bitcoin Mining
 
 Bitcoin mining is a computational process that verifies and validates transactions on the Bitcoin network. This process ensures network security, using electrical energy to power specialized devices called miners. In return for this activity, miners receive a reward in Bitcoin, making mining not only useful for the network but also economically beneficial for participants.
 
@@ -82,12 +82,12 @@ Once Edge Mining is installed, a small configuration is required:
 
 After completing these steps, your system will be ready to operate with Edge Mining.
 
-
+---
 
 Now you are ready to set up the view and create automations based on your needs.
 
 
-## Configuration Suggestions
+## 💡 Configuration Suggestions
 
 ### Create a view
 
@@ -107,9 +107,9 @@ Below is an example of a recommended view setup, displaying both the inverter's 
 ![View Example](https://github.com/edge-mining/addon-edge-mining/blob/main/images/view-example.png)
 
 
-# 🤖 Automations Example
+## 🤖 Automations Example
 
-## Introduction
+### Introduction
 
 One of the biggest challenges in managing a solar-powered system is efficiently utilizing all excess energy. Simple automations for turning devices on and off may work in basic scenarios, but they often lead to situations where, on clear sunny days, the battery reaches **100% charge too quickly**, even with the miner running. When this happens, surplus energy from the solar panels goes unused because the miner's power consumption may be lower than the system's maximum production.
 
@@ -121,13 +121,13 @@ To solve this, we are experimenting with automations that **proactively manage t
 
 The automations described below are part of an ongoing experiment to **optimize surplus energy usage** and may evolve as we refine the system. In the future, these automations will be integrated into Edge Mining as part of its energy optimization framework.
 
-## How the Automations Work
+### How the Automations Work
 
 These Home Assistant automations are designed to efficiently manage the **switching ON and OFF** of a miner based on battery level, solar forecast, and real-time solar power availability. The goal is to maximize energy efficiency while ensuring that battery power is used optimally.
 
 ---
 
-## **1. Switching ON the Miner**
+### **1. Switching ON the Miner**
 
 The miner is turned on when there is enough stored battery energy and an expectation that upcoming solar production will be sufficient to sustain mining operations. The system evaluates both the battery’s current charge and the estimated solar energy available throughout the day to determine the best moment to start mining.
 
@@ -141,7 +141,7 @@ This approach ensures that mining only starts when there is a reasonable expecta
 
 ---
 
-## **2. Switching OFF the Miner**
+### **2. Switching OFF the Miner**
 
 The miner is turned off when solar production becomes insufficient to support its operation, and the battery level begins to decline beyond an acceptable threshold. This prevents excessive battery depletion and ensures energy is reserved for other essential uses.
 
@@ -158,12 +158,9 @@ By adjusting the shutdown threshold dynamically according to solar forecasts, th
 
 This logic ensures that mining is halted at the right time, balancing energy efficiency with the need to sustain battery reserves for non-mining power consumption.
 
-
-
-
 ---
 
-## Conclusion
+## ✏️ Conclusion
 
 Edge Mining proposes an innovative solution to optimize the use of excess energy produced by small power plants, particularly renewable ones. Integrating Bitcoin mining is a flexible, economically advantageous, and easy-to-implement choice. With our mining management system, users can maximize the efficiency of their plant, utilize the heat produced, and contribute positively to the Bitcoin network. This approach turns a potential inefficiency into a concrete opportunity for profit and sustainable energy use.
 
