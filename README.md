@@ -1,8 +1,8 @@
-# Bitcoin Mining for Energy Efficiency
+# ⚡ Bitcoin Mining for Energy Efficiency
 
 Bitcoin mining represents a unique opportunity to improve efficiency in both the production and use of energy, whether on an industrial scale or for smaller setups. This project aims to make mining accessible and easy to implement, providing tools to integrate mining into energy systems and maximize the use of the energy produced.
 
-## The Challenge: Managing Excess Energy
+## 🌞 The Challenge: Managing Excess Energy
 
 In energy production plants, especially those relying on renewable sources like solar and wind, there's often a surplus of energy generated during peak hours (for example, when there is a lot of sun or wind) that doesn't align with peak demand times. Today, the main options for managing this excess energy include:
 
@@ -12,7 +12,7 @@ In energy production plants, especially those relying on renewable sources like 
 - **Using energy for marginal purposes**: Such as resistive heating, which generally doesn’t add significant economic value.
 - **Wasting the energy**: Which is a loss that reduces the overall efficiency of the plant.
 
-## The Solution: Bitcoin Mining
+## 🚀 The Solution: Bitcoin Mining
 
 Bitcoin mining is a computational process that verifies and validates transactions on the Bitcoin network. This process ensures network security, using electrical energy to power specialized devices called miners. In return for this activity, miners receive a reward in Bitcoin, making mining not only useful for the network but also economically beneficial for participants.
 
@@ -22,7 +22,7 @@ Moreover, mining produces heat as a byproduct. 100% of the electrical energy use
 
 These characteristics make mining an ideal solution for managing excess energy, particularly in small- and medium-sized plants.
 
-## Edge Mining: A Practical Approach for Everyone
+## 🏡 Edge Mining: A Practical Approach for Everyone
 
 Aside from electrical power, mining only requires a miner and a low-speed internet connection. It virtually needs nothing else, making it a very simple activity to implement anywhere.
 
@@ -36,11 +36,11 @@ Our project aims to develop a mining management system that:
 
 ---
 
-# Getting Started
+# 🔧 Getting Started
 
 Follow these instructions to create a mining setup integrated with Home Assistant to manage an ASIC miner based on your energy availability.
 
-## Prerequisites
+## 📋 Prerequisites
 
 Before you begin, make sure you have the following:
 
@@ -49,7 +49,7 @@ Before you begin, make sure you have the following:
 - **Compatible inverter**: Solaredge and Voltronic (Axpert, MPP Solar PIP, Voltacon or Effekta).
 - **ASIC miner** with a static IP, running **BraiinsOS** ([BraiinsOS installation guide](https://braiins.com/os-firmware))
 
-## Edge Mining Installation
+## 💾 Edge Mining Installation
 
 Now the first thing you need to do is to install the Edge Mining add-on by clicking the following button:
 
@@ -107,7 +107,7 @@ Below is an example of a recommended view setup, displaying both the inverter's 
 ![View Example](https://github.com/edge-mining/addon-edge-mining/blob/main/images/view-example.png)
 
 
-# Automations Example
+# 🤖 Automations Example
 
 ## Introduction
 
@@ -169,7 +169,7 @@ Edge Mining proposes an innovative solution to optimize the use of excess energy
 
 ---
 
-## Contributions and Feedback
+## 🤝 Contributions and Feedback
 
 We welcome contributions and feedback to make this project even better. Feel free to open issues or submit pull requests.
 
