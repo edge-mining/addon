@@ -78,7 +78,7 @@ Once Edge Mining is installed, a small configuration is required:
 1. **Insert the miner's static IP address** to ensure stable connectivity.
 2. **Enter the username and password for BraiinsOS**, which are usually `root/root` by default.
 
-![Edge Mining Configuration](https://github.com/sfrrcr/addon-edge-mining/blob/main/images/edge-mining-configuration-new.png)
+![Edge Mining Configuration](https://github.com/edge-mining/addon-edge-mining/blob/main/images/edge-mining-configuration-new.png)
 
 After completing these steps, your system will be ready to operate with Edge Mining.
 
@@ -104,7 +104,7 @@ Using a smart plug to control your miner's power on/off is advisable. Ensure tha
 
 Below is an example of a recommended view setup, displaying both the inverter's overall data, the miner's performance metrics, and the smart plug control for efficient energy management.
 
-![View Example](https://github.com/sfrrcr/addon-edge-mining/blob/main/images/view-example.png)
+![View Example](https://github.com/edge-mining/addon-edge-mining/blob/main/images/view-example.png)
 
 
 # Automations Example
