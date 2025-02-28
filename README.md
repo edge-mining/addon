@@ -81,11 +81,7 @@ Once Edge Mining is installed, a small configuration is required:
 ![Edge Mining Configuration](https://github.com/edge-mining/addon-edge-mining/blob/main/images/edge-mining-configuration-new.png)
 
 After completing these steps, your system will be ready to operate with Edge Mining.
-
----
-
 Now you are ready to set up the view and create automations based on your needs.
-
 
 ## 💡 Configuration Suggestions
 
@@ -106,7 +102,6 @@ Below is an example of a recommended view setup, displaying both the inverter's 
 
 ![View Example](https://github.com/edge-mining/addon-edge-mining/blob/main/images/view-example.png)
 
-
 ## 🤖 Automations Example
 
 ### Introduction
@@ -125,8 +120,6 @@ The automations described below are part of an ongoing experiment to **optimize 
 
 These Home Assistant automations are designed to efficiently manage the **switching ON and OFF** of a miner based on battery level, solar forecast, and real-time solar power availability. The goal is to maximize energy efficiency while ensuring that battery power is used optimally.
 
----
-
 ### **1. Switching ON the Miner**
 
 The miner is turned on when there is enough stored battery energy and an expectation that upcoming solar production will be sufficient to sustain mining operations. The system evaluates both the battery’s current charge and the estimated solar energy available throughout the day to determine the best moment to start mining.
@@ -138,8 +131,6 @@ The miner is turned on when there is enough stored battery energy and an expecta
 - If both conditions are met, the miner is turned on and continues running until conditions require it to be shut down.
 
 This approach ensures that mining only starts when there is a reasonable expectation of sustainable energy availability, preventing unnecessary battery drain.
-
----
 
 ### **2. Switching OFF the Miner**
 
@@ -163,8 +154,6 @@ This logic ensures that mining is halted at the right time, balancing energy eff
 ## ✏️ Conclusion
 
 Edge Mining proposes an innovative solution to optimize the use of excess energy produced by small power plants, particularly renewable ones. Integrating Bitcoin mining is a flexible, economically advantageous, and easy-to-implement choice. With our mining management system, users can maximize the efficiency of their plant, utilize the heat produced, and contribute positively to the Bitcoin network. This approach turns a potential inefficiency into a concrete opportunity for profit and sustainable energy use.
-
----
 
 ## 🤝 Contributions and Feedback
 
