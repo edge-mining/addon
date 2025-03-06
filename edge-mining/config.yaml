@@ -19,27 +19,27 @@ map:
     path: /config/
 
 options:
-  inverter_type: voltronic
-  solaredge_ip: "192.168.1.100 (set this ONLY for SOLAREDGE inverters)"
-  solaredge_port: 1502
-  solaredge_modbus_address: 1
   miner_ip: "192.168.1.111"
   miner_username: "root"
   miner_password: "root"
   miner_title: "S19j Pro"
+  inverter_type: solaredge
+  solaredge_ip: "192.168.1.100"
+  solaredge_port: 1502
+  solaredge_modbus_address: 1
   mqtt_broker_host: "homeassistant"
   mqtt_username: "mqtt_user"
   mqtt_password: "mqtt_password"
 
 schema:
-  inverter_type: list(voltronic|solaredge)
-  solaredge_ip: str?
-  solaredge_port: int?
-  solaredge_modbus_address: int?
   miner_ip: str
   miner_username: str
   miner_password: password
   miner_title: str
+  inverter_type: list(solaredge|voltronic)
+  solaredge_ip: str?
+  solaredge_port: int?
+  solaredge_modbus_address: int?
   mqtt_broker_host: str?
   mqtt_username: str?
   mqtt_password: password?
