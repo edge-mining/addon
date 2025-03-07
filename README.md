@@ -1,17 +1,13 @@
-⚡ Bitcoin Mining for Energy Efficiency
+# ⚡ Edge Mining ⚡
 
 Bitcoin mining can turn excess energy into economic value, making it an ideal solution for renewable energy plants with surplus production.
-
-🔌 The Solution
-
 Mining is highly flexible: it can be activated when there’s excess energy and instantly shut down when needed elsewhere. Additionally, the heat generated can be repurposed for heating, maximizing overall efficiency.
-
-🏡 Edge Mining
 
 Edge Mining is an add-on for Home Assistant that automates the installation of all necessary components to communicate with a photovoltaic system’s inverter and the mining hardware. It simplifies the configuration process, reducing it to just a few fields that the user needs to fill in, making mining integration effortless and accessible.
 
 Once set up, users only need to create their own Home Assistant dashboard and configure their automations. We also plan to integrate a pre-built dashboard and automations in future updates.
 
+---
 
 # 🔧 Getting Started
 
