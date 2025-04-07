@@ -1,3 +1,6 @@
+*⚠️ Disclaimer: This project is in a preliminary state and under active development. Features and functionality may change significantly.*
+*➡️ Development Note: The core of Edge Mining will be developed in the core repository, which is intended to serve as the main engine of the system. This repository is specifically dedicated to the Home Assistant add-on.*
+
 # ⚡ Edge Mining ⚡
 
 Bitcoin mining can turn excess energy into economic value, making it an ideal solution for renewable energy plants with surplus production.
