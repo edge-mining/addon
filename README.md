@@ -3,7 +3,7 @@
 ➡️ **Development Note**:
 - This is the **Add-on repository**, which provides the Home Assistant integration.
 - The [Core repository](https://github.com/edge-mining/core) contains the main engine of the Edge Mining system.
-- The [Docs repository](https://github.com/edge-mining/docs) contains documentation of the Edge Mining application.
+- The [Docs repository](https://github.com/edge-mining/docs) specifically dedicated to documentation of the Edge Mining application.
 
 
 # ⚡ Edge Mining ⚡
